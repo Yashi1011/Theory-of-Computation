@@ -1,14 +1,17 @@
-States:-
-0 1 2 
+States:
+0 1 2
 
-Transitions:-
-0(a) -> 0,1
-0(b) -> 0
-1(a) -> #
-1(b) -> 2
-2(a) -> #
-2(b) -> #
+Alphabets:
+2
 
-Final State:-
+Transitions:
+0 1-0
+#-2
+#-#
+
+Initial State:
+0
+
+Final State:
 2
 
