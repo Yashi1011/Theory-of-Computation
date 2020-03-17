@@ -1,17 +1,13 @@
 States:
-0 1 2
-
+3
 Alphabets:
 2
-
 Transitions:
 0 1-0
 #-2
 #-#
-
 Initial State:
 0
-
 Final State:
 2
 
