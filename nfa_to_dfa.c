@@ -1,7 +1,11 @@
-//Converting an NFA to DFA.
-
 #include<stdio.h>
 
+count=-1;
+
+int counter(int alp){
+	count++;
+	return count/alp;
+}
   
 void swap(int *xp, int *yp){ 
 	int temp = *xp; 
@@ -31,50 +35,20 @@ int removeDuplicates(int arr[], int n)
         if (arr[i] != arr[i+1]) 
             arr[j++] = arr[i]; 
   
-    arr[j++] = arr[n-1]; 
-  
-    return j; 
+    arr[j++] = arr[n-1];
+    if(arr[0]==-1){
+    	for(i=0;i<j-1;i++){
+    		arr[i]=arr[i+1];
+		}
+		return j-1;
+	}
+	else{
+		return j;
+	}    
 } 
 
-
-void check_state(int a[], int n,int *dfa_state[3][n],int k){
-	int i,j;
-	sort(a,k);
-	for(i=0;i<k;i++){
-		printf("%d ",a[i]);
-	}
-	printf("\n");
-	k = removeDuplicates(a,k);
-	printf("k=%d\n",k);
-	for(i=0;i<k;i++){
-		printf("%d ",a[i]);
-	}
-	printf("\n");
-	for(i=0;i<3;i++){
-		for(j=0;j<k;j++){
-			printf("%d ",dfa_state[i][j]);
-		}
-		printf("\n");
-	}
-	for(i=0;i<3;i++){
-		int c1=0;
-		for(j=0;j<k;j++){
-			if(dfa_state[i][j]==a[j]){
-				c1=c1+1;
-			}
-		}
-		printf("%d\n",c1);
-		if(c1==k){
-			printf("Exists\n");
-		}
-		else{
-			printf("doesn't exist\n");
-		}
-	}
-}
-
-void transition(int state[],int nfa_states,int alphabets,int nfa_transitions[nfa_states][alphabets][nfa_states],int *dfa_state[3][nfa_states]){
-	int x=0,i=0,j,k=0;
+int transition(int state[],int nfa_states,int alphabets,int nfa_transitions[nfa_states][alphabets][nfa_states],int dfa_state[3][nfa_states],int state_counter,int dfa_transitions[3][alphabets]){
+	int x=0,i=0,j,k=0,z;
 	int a[100];
 	for(i=0;i<alphabets;i++){
 		k=0;
@@ -88,7 +62,57 @@ void transition(int state[],int nfa_states,int alphabets,int nfa_transitions[nfa
 			}
 			x++;
 		}
-		check_state(a,nfa_states,dfa_state,k);
+		sort(a,k);
+		k = removeDuplicates(a,k);
+		int flag=0, t_state;
+		for(z=0;z<state_counter;z++){
+			int c1=0;
+			for(j=0;j<k;j++){
+				if(dfa_state[z][j]==a[j]){
+					c1=c1+1;
+				}
+			}
+			if(c1==k){
+				t_state=z;
+				flag=0;
+				break;
+			}
+			else{
+				flag=1;
+			}
+		}
+		if(flag == 1){
+			t_state=state_counter;
+			for(j=0;j<k;j++){
+				dfa_state[state_counter][j] = a[j];
+			}
+			state_counter++;
+		}
+		dfa_transitions[counter(alphabets)][i] = t_state;
+	}
+
+	return state_counter;
+}
+
+print_nfa(int state_counter,int nfa_states,int alphabets,int dfa_state[3][nfa_states],int dfa_transitions[3][alphabets]){
+	int i,j;
+	printf("DFA of given NFA :\n\nSTATE");
+	for(j=0;j<alphabets;j++){
+		printf("\t\t\tALP%d",j+1);
+	}
+	printf("\n");
+	for(i=0;i<state_counter;i++){
+		printf("State %d : ",i);
+		for(j=0;j<alphabets;j++){
+			if(dfa_state[i][j]!=-2){
+				printf("%d ",dfa_state[i][j]);
+			}
+		}
+		printf("\t\t");
+		for(j=0;j<alphabets;j++){
+			printf("%d\t\t",dfa_transitions[i][j]);
+		}
+		printf("\n\n");
 	}
 }
 
@@ -97,6 +121,7 @@ void convert_dfa(int nfa_states,int alphabets,int nfa_transitions[nfa_states][al
 	int i=0,j=0,k;
 	int dfa_istate = nfa_istate;
 	int dfa_state[3][nfa_states];
+	int dfa_transitions[3][alphabets];
 	
 	for(i=0;i<3;i++){
 		for(j=0;j<nfa_states;j++){
@@ -104,26 +129,27 @@ void convert_dfa(int nfa_states,int alphabets,int nfa_transitions[nfa_states][al
 		}
 	}
 	
+	int state_counter = 1;
+	
 	dfa_state[0][0] = nfa_istate;
 	
-		int state[nfa_states];
-		for(i=0;i<3;i++){
-			for(j=0;j<nfa_states;j++){
-				state[j]=dfa_state[i][j];
+	int state[nfa_states];
+	for(i=0;i<3;i++){
+		for(j=0;j<nfa_states;j++){
+			state[j]=dfa_state[i][j];
 				
-			}
-			transition(state, nfa_states, alphabets, nfa_transitions, dfa_state);
 		}
+		state_counter = transition(state, nfa_states, alphabets, nfa_transitions, dfa_state,state_counter,dfa_transitions);
+	}
 	
-//	for (i = 0; i < nfa_states; i++){
-//		for(j=0;j<alphabets;j++){
-//			for(k=0;k<nfa_states;k++){
-//				printf("%d ",nfa_transitions[i][j][k] );
-//				
-//			}
-//		}	
-//	}
-
+	for(i=0;i<3;i++){
+		for(j=0;j<nfa_states;j++){
+			printf("%d ",dfa_state[i][j]);
+		}
+		printf("\n");
+	}
+	
+	print_nfa(state_counter, nfa_states, alphabets,dfa_state,dfa_transitions);
 	
 }
 
