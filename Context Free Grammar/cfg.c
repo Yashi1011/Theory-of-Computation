@@ -1,5 +1,5 @@
 #include<stdio.h>
-
+#include<stdlib.h>
 #include<string.h>
 
 int i, j, k, l, m, n = 0, o, p, nv, z = 0, t, x = 0;
@@ -36,9 +36,8 @@ void findter() {
         findter();
 }
 
-void main() {
+int main() {
     FILE * f;
-    clrscr();
 
     for (i = 0; i < 10; i++)
         pro[i].n = 0;
@@ -67,7 +66,7 @@ void main() {
 
     while (1) {
         for (l = 0; l < 10; l++)
-            str[0] = NULL;
+            str[l] = '\0';
 
         printf("\n\nENTER ANY STRING ( 0 for EXIT ) : ");
         scanf("%s", str);
@@ -76,7 +75,7 @@ void main() {
 
         for (j = 0; j < pro[0].n; j++) {
             for (l = 0; l < 20; l++)
-                temp[l] = NULL;
+                temp[l] = '\0';
             strcpy(temp, pro[0].rhs[j]);
 
             m = 0;
@@ -101,5 +100,4 @@ void main() {
             printf("\n\nTHE STRING can NOT be PARSED !!!");
     }
 
-    getch();
 }
