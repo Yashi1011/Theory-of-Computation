@@ -1,12 +1,16 @@
+//Program to convert given NFA to DFA.
+
 #include<stdio.h>
 
 int count=-1;
 
+//Function for a counter to keep the record of DFA states.
 int counter(int alp){
 	count++;
 	return count/alp;
 }
-  
+
+//Function to swap numbers.
 void swap(int *xp, int *yp){ 
 	int temp = *xp; 
 	*xp = *yp; 
