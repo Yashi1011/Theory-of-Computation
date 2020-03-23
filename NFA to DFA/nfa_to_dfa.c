@@ -188,7 +188,7 @@ int main(){
 	int nfa_states = 0, alphabets, nfa_istate;
 	int i,j,k;
 	
-	ptr = fopen("nfa.txt", "r");
+	ptr = fopen("nfa_input.txt", "r");
 	if(ptr == NULL){
 		printf("Error opening the file.\n");
 		return 0;
