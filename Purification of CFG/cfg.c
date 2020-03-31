@@ -31,7 +31,7 @@ void removeEpsilon(char epsilon)
         for(j=0; j<pro[i].n; j++)
         {
             int l=0;
-            char word[10]="";
+            char word[10]=" ";
             for(k=0; k<strlen(pro[i].rhs[j]); k++)
             {
                 if(pro[i].rhs[j][k]!=epsilon)
@@ -41,15 +41,6 @@ void removeEpsilon(char epsilon)
                 }
             }
             strcpy(pro[i].rhs[j],word);
-        }
-    }
-
-    printf("\n\nThe Grammar is :-\n\n");
-    for(i=0; i<cnt; i++)
-    {
-        for(j=0; j<pro[i].n; j++)
-        {
-            printf("%s -> %s\n", pro[i].lhs, pro[i].rhs[j]);
         }
     }
 
@@ -93,7 +84,7 @@ int main()
     cnt--;
 
     //Printing the grammar.
-    printf("\n\nThe Grammar is :-\n\n");
+    printf("\nThe initial Grammar is :-\n\n");
     for(i=0; i<cnt; i++)
     {
         for(j=0; j<pro[i].n; j++)
@@ -113,6 +104,17 @@ int main()
                 printf("\nEpsilon = %c\n",epsilon);
                 removeEpsilon(epsilon);
             }
+        }
+    }
+
+    printf("\nThe final Grammar is :-\n\n");
+    for(i=0; i<cnt; i++)
+    {
+        for(j=0; j<pro[i].n; j++)
+        {
+            if(pro[i].rhs[j][0]!='#' && pro[i].rhs[j][0]!=' ')
+                printf("%s -> %s\n", pro[i].lhs, pro[i].rhs[j]);
+
         }
     }
 
