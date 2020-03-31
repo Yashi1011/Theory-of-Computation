@@ -8,8 +8,8 @@
 
 
 //Decalring global variables/arrays.
-int i,j,k,l,m,o,p,nv,z=0,t,cnt=0,x=0;
-char word[10], temp1[20], temp2[20], temp3[20];
+int i,j,k,cnt=0;
+char epsilon;
 
 
 //Defining a structure array for productions.
@@ -41,8 +41,6 @@ void removeEpsilon(char epsilon)
                 }
             }
             strcpy(pro[i].rhs[j],word);
-            printf("%s\n",word);
-            //pro[i].n++;
         }
     }
 
@@ -104,15 +102,14 @@ int main()
         }
     }
 
-    char epsilon;
     //Removal of epsilon productions.
-    for(i=0; i<cnt; i++)
+    for(int a=0; a<cnt; a++)
     {
-        for(j=0; j<pro[i].n; j++)
+        for(int b=0; b<pro[a].n; b++)
         {
-            if(strcmp(pro[i].rhs[j],"#")==0)
+            if(pro[a].rhs[b][0]=='#')
             {
-                epsilon=pro[i].lhs[0];
+                epsilon=pro[a].lhs[0];
                 printf("\nEpsilon = %c\n",epsilon);
                 removeEpsilon(epsilon);
             }
