@@ -30,15 +30,28 @@ void removeEpsilon(char epsilon)
     {
         for(j=0; j<pro[i].n; j++)
         {
-            for(int k=0; k<strlen(pro[i].rhs[j]); k++)
+            int l=0;
+            char word[10]="";
+            for(k=0; k<strlen(pro[i].rhs[j]); k++)
             {
-                if(pro[i].rhs[j][k]==epsilon) 
+                if(pro[i].rhs[j][k]!=epsilon)
                 {
-                    strcpy(pro[i].rhs[pro[i].n], pro[i].rhs[j]);
-                    printf("\nAdd - %s",pro[i].rhs[j]);
-                    break;
+                    word[l]=pro[i].rhs[j][k];
+                    l++;
                 }
             }
+            strcpy(pro[i].rhs[j],word);
+            printf("%s\n",word);
+            //pro[i].n++;
+        }
+    }
+
+    printf("\n\nThe Grammar is :-\n\n");
+    for(i=0; i<cnt; i++)
+    {
+        for(j=0; j<pro[i].n; j++)
+        {
+            printf("%s -> %s\n", pro[i].lhs, pro[i].rhs[j]);
         }
     }
 
