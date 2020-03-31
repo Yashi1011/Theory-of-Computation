@@ -34,7 +34,7 @@ void removeEpsilon(char epsilon)
             {
                 if(pro[i].rhs[j][k]==epsilon) 
                 {
-                    strcpy(pro[i].rhs[j],pro[i].rhs[pro[i].n]);
+                    strcpy(pro[i].rhs[pro[i].n], pro[i].rhs[j]);
                     printf("\nAdd - %s",pro[i].rhs[j]);
                     break;
                 }
