@@ -1,5 +1,86 @@
 #include<stdio.h>
 
+int check_states(int states,int alphabets, int transitions[states][alphabets], int arr[states],int c,int min_states[states][states],int counter){
+	int a,i,j;
+	int sub_grp[c][c];
+	for(i=0;i<c;i++){
+		for(j=0;j<c;j++){
+			sub_grp[i][j]=-2;
+		}
+	}
+	for(a=0;a<alphabets;a++){
+		int c0=0,c1=0;
+		for(i=0;i<c;i++){
+			for(j=0;j<states;j++){
+				printf("%d %d\n",transitions[arr[i]][a],min_states[i][j] );
+				if(transitions[arr[i]][a]==min_states[i][j]){
+					c0++;
+				}
+			}
+			if(c0==c){
+				printf("Hey!!!");
+				break;
+			}
+			
+		}
+		if(c0==c){
+				printf("Hey!!!");
+				break;
+		}
+		printf("\n");
+	}
+	return counter;
+}
+
+void minimize(int states, int alphabets, int transitions[states][alphabets], int istate, int fstate[states]){
+	int min_states[states][states];
+	int i,j;
+	
+	for(i=0;i<states;i++){
+		for(j=0;j<states;j++){
+			min_states[i][j]=-2;
+		}
+	}
+	int c0=0,c1=0;
+	for(i=0;i<states;i++){
+		int flag=0;
+		for(j=0;j<states;j++){
+			if(i==fstate[j])
+				flag=1;
+		}
+		if(flag==1){
+			min_states[1][c1]=i;
+			c1++;
+		}
+		else{
+			min_states[0][c0]=i;
+			c0++;
+		}
+	}
+	printf("c0=%d c1=%d\n",c0,c1);
+	for(i=0;i<states;i++){
+		for(j=0;j<states;j++){
+			printf("%d ",min_states[i][j]);
+		}
+		printf("\n");
+	}
+	int counter=2;
+	i=0;
+	while(i<counter){
+		int arr[states], c, pre_counter;
+		for(j=0;min_states[i][j]!=-2;j++){
+			arr[j]=min_states[i][j];
+		}
+		c=j;
+		pre_counter=counter;
+		counter = check_states(states, alphabets, transitions, arr, c, min_states, counter);
+		if(pre_counter==counter){
+			i++;
+		}
+		//printf("%d ",c);
+	}
+}
+
 int main(){
 	FILE *ptr;
 	char buff[100];
@@ -80,6 +161,8 @@ int main(){
 	for(i=0;i<states;i++){
 		printf("%d ",fstate[i]);
 	}
+	
+	minimize(states, alphabets, transitions, istate, fstate);
 	
 	return 0;
 }
