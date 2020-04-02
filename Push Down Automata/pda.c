@@ -21,21 +21,24 @@ char pop()
 	return s.stack[s.top--];
 }
 
+
+
 int main()
 {
 	s.top=-1;
 	s.cnt=0;
+	int i,j,k;
 	char word[50];
 	printf("Enter the word in a^n b^m a^m b^n format: ");
 	scanf("%s",word);
-	for(int i=0; word[i]!='\0'; i++)
+	for(i=0; word[i]!='\0'; i++)
 	{
 		if(word[i]=='a' || word[i]=='b')
 		{
 			if(word[i]=='a')
 			{
 				int x=0;
-				for(int j=0; j<i; j++)
+				for(j=0; j<i; j++)
 				{
 					if(word[j]!='b')
 					{
@@ -65,14 +68,19 @@ int main()
 				if(i>0)
 				{
 					int x=0;
-					for(int j=0; j<i; j++)
+					for(j=0; j<i; j++)
 					{
-						if(word[j]=='a')
+						if(word[j]=='b')
 						{
+							break;
+						}
+					}
+					for(k=j;k<i;k++){
+						if(word[k]!='a'){
 							x++;
 						}
 					}
-					if(x==i)
+					if(x==i-j)
 					{
 						push(word[i]);
 					}
@@ -96,6 +104,11 @@ int main()
 					exit(0);
 				}
 			}
+			printf("%d\n",i);
+			for(k=0;k<s.cnt;k++){
+				printf("%c\n",s.stack[k]);
+			}
+			printf("\n");
 		}
 		else
 		{
