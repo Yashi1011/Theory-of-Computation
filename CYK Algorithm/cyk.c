@@ -7,8 +7,8 @@
 
 //Structure to store productions.
 struct Production{
-    char lhs[10], rhs[10][10];
-    int n;
+	char lhs[10], rhs[10][10];
+    	int n;
 }pro[10];
 
 //Function to order and remove duplicates of the Vij.
@@ -33,8 +33,8 @@ void order(char *str){
 	
 	j = 0;
    	for(i=0;i<n-1;i++){
-   		if (str[i] != str[i+1]) 
-            str[j++] = str[i];
+   		if (str[i] != str[i+1])
+			str[j++] = str[i];
 	}
 	str[j++]=str[n-1];
 	str[j]='\0';
@@ -52,11 +52,11 @@ void vij_union(char a[10], char b[10], int cnt, int p, int q, int n, char v[n][n
 			s[1]=b[j];
 			s[2]='\0';
 			for(x=0; x<cnt; x++){
-    	    	for(y=0; y<pro[x].n; y++){
-            		if(strcmp(pro[x].rhs[y],s)==0){
-            			strcat(str,pro[x].lhs);
-            		}
-        		}
+    	    			for(y=0; y<pro[x].n; y++){
+            				if(strcmp(pro[x].rhs[y],s)==0){
+            					strcat(str,pro[x].lhs);
+            				}
+        			}
 			}
 		}
 	}
@@ -69,66 +69,70 @@ void vij_union(char a[10], char b[10], int cnt, int p, int q, int n, char v[n][n
 int main() 
 {
 	int i,j,k,x,y,cnt=0;
-    //Declaring a file pointer.
-    FILE *f;
+    	//Declaring a file pointer.
+    	FILE *f;
 
-    //Initialising the number in productions to 0.
-    for(i=0; i<10; i++)
+   	//Initialising the number in productions to 0.
+    	for(i=0; i<10; i++)
         pro[i].n=0;
 
-    //Opening the file.
-    f = fopen("CYK.txt", "r");
+    	//Opening the file.
+    	f = fopen("CYK.txt", "r");
 
-    //Reading the contents of the file.
-    while(!feof(f)){
-        //Storing the LHS of the production.
-        fscanf(f, "%s", pro[cnt].lhs);
-        if(cnt>0){
-            if(strcmp(pro[cnt].lhs, pro[cnt-1].lhs)==0){
-                pro[cnt].lhs[0]='\0';
-                fscanf(f, "%s", pro[cnt-1].rhs[pro[cnt-1].n]);
-                pro[cnt-1].n++;
-                continue;
-            }
-        }
-        //Storing the RHS of the production.
-        fscanf(f, "%s", pro[cnt].rhs[pro[cnt].n]);
-        pro[cnt].n++;
-        cnt++;
-    }
-    cnt--;
-    //Printing the grammar.
-    printf("\nThe initial Grammar is :-\n\n");
-    for(i=0; i<cnt; i++){
-        for(j=0; j<pro[i].n; j++){
-            printf("%s -> %s\n", pro[i].lhs, pro[i].rhs[j]);
-        }
-    }
-    char str[20];
-    printf("\n\nEnter a string : ");
-    scanf("%s",&str);
-    
-    int n = strlen(str)+1;
-    
-    char v[n][n][10];
-    
-    for(i=1;i<n;i++){
-    	for(j=1;j<n;j++){
-    		strcpy(v[i][j],"\0");
-		}
-    }
+    	//Reading the contents of the file.
+    	while(!feof(f)){
+        	//Storing the LHS of the production.
+        	fscanf(f, "%s", pro[cnt].lhs);
+        	if(cnt>0){
+            		if(strcmp(pro[cnt].lhs, pro[cnt-1].lhs)==0){
+                		pro[cnt].lhs[0]='\0';
+                		fscanf(f, "%s", pro[cnt-1].rhs[pro[cnt-1].n]);
+                		pro[cnt-1].n++;
+                		continue;
+            		}
+        	}
+        	//Storing the RHS of the production.
+        	fscanf(f, "%s", pro[cnt].rhs[pro[cnt].n]);
+        	pro[cnt].n++;
+        	cnt++;
+    	}
+    	cnt--;
+    	//Printing the grammar.
+    	printf("\nThe initial Grammar is :-\n\n");
+    	for(i=0; i<cnt; i++){
+        	for(j=0; j<pro[i].n; j++){
+            	printf("%s -> %s\n", pro[i].lhs, pro[i].rhs[j]);
+        	}
+    	}
 	
-    for(i=0;i<n;i++){
-    	for(x=0; x<cnt; x++){
-    	    for(y=0; y<pro[x].n; y++){
-            	if(pro[x].rhs[y][0]==str[i]){
-                	char e=pro[x].lhs[0];
-                	for(k=0;v[i+1][1][k]!='\0';k++){
+    	char str[20];
+   	printf("\n\nEnter a string : ");
+    	scanf("%s",&str);
+	
+    	//Finding the length g given string.
+    	int n = strlen(str)+1;
+	
+    	//Creating an multi-dimentional array of strings to store Vij's.
+    	char v[n][n][10];
+    	
+	//Beginning of CYK algo.
+    	for(i=1;i<n;i++)
+	    	for(j=1;j<n;j++){
+		    	strcpy(v[i][j],"\0");
+	    	}
+    	}
+	
+    	for(i=0;i<n;i++){
+    		for(x=0; x<cnt; x++){
+    	    		for(y=0; y<pro[x].n; y++){
+            			if(pro[x].rhs[y][0]==str[i]){
+                			char e=pro[x].lhs[0];
+                			for(k=0;v[i+1][1][k]!='\0';k++){
 					}
 					v[i+1][1][k]=e;
 					v[i+1][1][k+1]='\0';
-            	}
-        	}
+            			}
+        		}
 		}
 	}
 	
@@ -142,6 +146,8 @@ int main()
 			}
 		}
 	}
+
+	//Printing the table.
 	printf("\n\nTABLE :\n\n");
 	for(i=0;str[i]!='\0';i++){
 		printf("%c\t",str[i]);
@@ -149,11 +155,12 @@ int main()
 	printf("\n\n");
 	for(j=1;j<n;j++){
 		for(i=1;i<(n-j+1);i++)
-    		printf("%s\t",v[i][j]);
-    	printf("\n\n");	
+    			printf("%s\t",v[i][j]);
+    		printf("\n\n");	
 	}
 	
-		int flag = 0;
+	//Checking if he given string is a word in that Language.
+	int flag = 0;
 	strcpy(s1,v[1][n-1]);
 	for(i=0;s1[i]!='\0';i++){
 		if(s1[i]=='S'){
