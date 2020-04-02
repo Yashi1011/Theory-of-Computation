@@ -1,6 +1,6 @@
-
 //a^n b^m a^m b^n
 #include <stdio.h>
+#include <stdlib.h>
 
 struct Stack
 {
@@ -34,7 +34,7 @@ int main()
 		{
 			if(word[i]=='a')
 			{
-				int x;
+				int x=0;
 				for(int j=0; j<i; j++)
 				{
 					if(word[j]!='b')
@@ -56,14 +56,15 @@ int main()
 					else
 					{
 						printf("Wrong word");
+						exit(0);
 					}
 				}
 			}
 			else if(word[i]=='b')
 			{
-				if(i>1)
+				if(i>0)
 				{
-					int x;
+					int x=0;
 					for(int j=0; j<i; j++)
 					{
 						if(word[j]=='a')
@@ -85,19 +86,22 @@ int main()
 						else
 						{
 							printf("Wrong word");
+							exit(0);
 						}
 					}
 				}
 				else
 				{
 					printf("\nn is a positive integer and can't be zero\n");
+					exit(0);
 				}
 			}
 		}
 		else
 		{
 			printf("\nWrong string entered\n");
-			break;
+			exit(0);
 		}
 	}
+	printf("Right word\n");
 }
