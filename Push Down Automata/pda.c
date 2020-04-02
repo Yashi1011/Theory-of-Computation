@@ -106,7 +106,7 @@ int main()
 			}
 			printf("%d\n",i);
 			for(k=0;k<s.cnt;k++){
-				printf("%c\n",s.stack[k]);
+				printf("%c ",s.stack[k]);
 			}
 			printf("\n");
 		}
@@ -116,5 +116,8 @@ int main()
 			exit(0);
 		}
 	}
-	printf("Right word\n");
+	if(s.cnt!=0)
+		printf("Wrong word\n");
+	else
+		printf("Right word\n");
 }
