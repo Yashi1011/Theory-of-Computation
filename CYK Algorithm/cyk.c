@@ -2,13 +2,63 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct Production
-{
-
+struct Production{
     char lhs[10], rhs[10][10];
     int n;
 
 }pro[10];
+
+void order(char *str){
+	int i, j;
+   	int n = strlen(str);
+	char temp;
+
+   	for(i=0; i<n-1; i++) {
+      	for (j=i+1; j<n; j++) {
+         	if (str[i] > str[j]) {
+            	temp = str[i];
+            	str[i] = str[j];
+            	str[j] = temp;
+        	}
+      	}
+   	}
+   	
+   	if(strlen(str)==0 || strlen(str)==1){
+   		return;
+	}
+	j = 0;
+   	for(i=0;i<n-1;i++){
+   		if (str[i] != str[i+1]) 
+            str[j++] = str[i];
+	}
+	str[j++]=str[n-1];
+	str[j]='\0';
+}
+
+void vij_union(char a[10], char b[10], int cnt, int p, int q, int n, char v[n][n][10]){
+	int i,j,x,y;
+	char s[10];
+	char str[10];
+	strcpy(str,"\0");
+	for(i=0;i<strlen(a);i++){
+		for(j=0;j<strlen(b);j++){
+			s[0]=a[i];
+			s[1]=b[j];
+			s[2]='\0';
+			for(x=0; x<cnt; x++){
+    	    	for(y=0; y<pro[x].n; y++){
+            		if(strcmp(pro[x].rhs[y],s)==0){
+            			strcat(str,pro[x].lhs);
+            		}
+        		}
+			}
+		}
+	}
+	strcat(str,v[p][q]);
+	order(str);
+	strcpy(v[p][q],str);
+	
+}
 
 int main() 
 {
@@ -41,7 +91,6 @@ int main()
         cnt++;
     }
     cnt--;
-	printf("count = %d",cnt);
     //Printing the grammar.
     printf("\nThe initial Grammar is :-\n\n");
     for(i=0; i<cnt; i++){
@@ -53,12 +102,12 @@ int main()
     printf("\n\nEnter a string : ");
     scanf("%s",&str);
     
-    int n = strlen(str);
+    int n = strlen(str)+1;
     
     char v[n][n][10];
     
-    for(i=0;i<n;i++){
-    	for(j=0;j<n;j++){
+    for(i=1;i<n;i++){
+    	for(j=1;j<n;j++){
     		strcpy(v[i][j],"\0");
 		}
     }
@@ -68,17 +117,33 @@ int main()
     	    for(y=0; y<pro[x].n; y++){
             	if(pro[x].rhs[y][0]==str[i]){
                 	char e=pro[x].lhs[0];
-                	for(k=0;v[i][1][k]!='\0';k++){
+                	for(k=0;v[i+1][1][k]!='\0';k++){
 					}
-					v[i][1][k]=e;
-					v[i][1][k+1]='\0';
+					v[i+1][1][k]=e;
+					v[i+1][1][k+1]='\0';
             	}
         	}
 		}
 	}
 	
-	
-    for(i=0;i<n;i++){
-    	printf("-->%s\n",v[i][1]);
+	char s1[10],s2[10];
+	for(j=2;j<n;j++){
+		for(i=1;i<(n-j+1);i++){
+			for(k=1;k<=(j-1);k++){
+				strcpy(s1,v[i][k]);
+				strcpy(s2,v[i+k][j-k]);
+				vij_union(s1,s2,cnt,i,j,n,v);
+			}
+		}
+	}
+	printf("\n\nTABLE :\n\n");
+	for(i=0;str[i]!='\0';i++){
+		printf("%c\t",str[i]);
+	}
+	printf("\n\n");
+	for(j=1;j<n;j++){
+		for(i=1;i<(n-j+1);i++)
+    		printf("%s\t",v[i][j]);
+    	printf("\n\n");	
 	}
 }
