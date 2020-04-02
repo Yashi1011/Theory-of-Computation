@@ -1,31 +1,36 @@
+//CYK Algorithm.
+
+//Including all the required libraries.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+//Structure to store productions.
 struct Production{
     char lhs[10], rhs[10][10];
     int n;
-
 }pro[10];
 
+//Function to order and remove duplicates of the Vij.
 void order(char *str){
 	int i, j;
    	int n = strlen(str);
 	char temp;
 
    	for(i=0; i<n-1; i++) {
-      	for (j=i+1; j<n; j++) {
-         	if (str[i] > str[j]) {
-            	temp = str[i];
-            	str[i] = str[j];
-            	str[j] = temp;
-        	}
-      	}
+      		for (j=i+1; j<n; j++) {
+         		if (str[i] > str[j]) {
+            		temp = str[i];
+            		str[i] = str[j];
+            		str[j] = temp;
+        		}
+      		}
    	}
    	
    	if(strlen(str)==0 || strlen(str)==1){
    		return;
 	}
+	
 	j = 0;
    	for(i=0;i<n-1;i++){
    		if (str[i] != str[i+1]) 
@@ -35,6 +40,7 @@ void order(char *str){
 	str[j]='\0';
 }
 
+//Function to find the union of Vij.
 void vij_union(char a[10], char b[10], int cnt, int p, int q, int n, char v[n][n][10]){
 	int i,j,x,y;
 	char s[10];
@@ -146,4 +152,19 @@ int main()
     		printf("%s\t",v[i][j]);
     	printf("\n\n");	
 	}
+	
+		int flag = 0;
+	strcpy(s1,v[1][n-1]);
+	for(i=0;s1[i]!='\0';i++){
+		if(s1[i]=='S'){
+			flag=1;
+		}
+	}
+	if(flag==1){
+		printf("%s is accepted by language.\n",str);
+	}
+	else{
+		printf("%s is NOT accepted by language.\n",str);
+	}
+	
 }
