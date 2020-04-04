@@ -1,46 +1,106 @@
 #include<stdio.h>
 
-int check_states(int states,int alphabets, int transitions[states][alphabets], int arr[states],int c,int min_states[states][states],int counter){
-	int a,i,j;
-	int sub_grp[c][c];
-	for(i=0;i<c;i++){
-		for(j=0;j<c;j++){
-			sub_grp[i][j]=-2;
+void order(int states,int min_states[states][states],int imp){
+	int i,c=0,a[states];
+	for(i=0;i<states;i++)
+		a[i]=-2;
+	for(i=0;i<states;i++){
+		if(min_states[imp][i]!=-2){
+			a[c]=min_states[imp][i];
+			c++;
 		}
 	}
-	for(a=0;a<alphabets;a++){
-		int c0=0,c1=0;
-		for(i=0;i<c;i++){
-			for(j=0;j<states;j++){
-				printf("%d %d\n",transitions[arr[i]][a],min_states[i][j] );
-				if(transitions[arr[i]][a]==min_states[i][j]){
-					c0++;
-				}
-			}
-			if(c0==c){
-				printf("Hey!!!");
-				break;
-			}
-			
+	for(i=0;i<states;i++)
+		min_states[imp][i]=a[i];
+}
+
+print(int alphabets,int states,int counter,int min_states[states][states],int min_transitions[states][alphabets], int min_istate, int min_fstate[states]){
+	int i,j;
+	printf("\nMINIMIZED DFA STATES : \n\n");
+	for(i=0;i<counter;i++){
+		printf("State %d = ( ",i);
+		for(j=0;min_states[i][j]!=-2;j++){
+			printf("%d ",min_states[i][j]);
 		}
-		if(c0==c){
-				printf("Hey!!!");
-				break;
+		printf(")\n");
+	}
+	printf("\nTRANSITIONS : \n\n");
+	printf("State\t");
+	for(i=0;i<alphabets;i++){
+		printf("alp%d\t",i+1);
+	}
+	printf("\n");
+	for(i=0;i<counter;i++){
+		printf("%d\t",i);
+		for(j=0;j<alphabets;j++){
+			printf("%d\t",min_transitions[i][j]);
 		}
 		printf("\n");
 	}
+	printf("\nINITIAL STATE : state %d\n",min_istate);
+	printf("\nFINAL STATE(S) : \n");
+	for(i=0;min_fstate[i]!=-2;i++){
+		printf("state %d\n",min_fstate[i]);
+	}
+}
+
+int check_states(int states,int alphabets, int transitions[states][alphabets], int arr[states],int c,int min_states[states][states],int counter,int imp, int min_transitions[states][alphabets]){
+	int a,i,j,k,l;
+	int sub[alphabets][c];
+	
+	for(i=0;i<alphabets;i++){
+		for(j=0;j<c;j++){
+			sub[i][j]=transitions[arr[j]][i];
+		}
+	}
+	
+	int flag=0,x=0;
+	for(k=0;k<alphabets;k++){
+		int s;
+		for(l=0;l<c;l++){
+			for(i=0;i<counter;i++){
+				for(j=0;j<states;j++){
+					if(min_states[i][j]==sub[k][l]){
+						s=i;
+						break;
+					}
+				}
+			}
+		}
+		min_transitions[imp][k]=s;
+		for(l=0;l<c;l++){
+			for(i=0;i<counter;i++){
+				for(j=0;j<states;j++){
+					if(min_states[i][j]==sub[k][l] && s!=i){
+						min_states[counter][x]=arr[l];
+						min_states[imp][l]=-2;
+						flag=1;
+						x++;
+					}
+				}
+			}
+		}
+			
+	}
+	if(flag==1){
+		counter++;
+	}
+	order(states,min_states,imp);
+
 	return counter;
 }
 
 void minimize(int states, int alphabets, int transitions[states][alphabets], int istate, int fstate[states]){
 	int min_states[states][states];
-	int i,j;
+	int i,j,x,k;
+	int min_transitions[states][alphabets], min_istate, min_fstate[states];
 	
 	for(i=0;i<states;i++){
 		for(j=0;j<states;j++){
 			min_states[i][j]=-2;
 		}
 	}
+	
 	int c0=0,c1=0;
 	for(i=0;i<states;i++){
 		int flag=0;
@@ -57,28 +117,56 @@ void minimize(int states, int alphabets, int transitions[states][alphabets], int
 			c0++;
 		}
 	}
-	printf("c0=%d c1=%d\n",c0,c1);
-	for(i=0;i<states;i++){
-		for(j=0;j<states;j++){
-			printf("%d ",min_states[i][j]);
-		}
-		printf("\n");
-	}
 	int counter=2;
 	i=0;
-	while(i<counter){
-		int arr[states], c, pre_counter;
-		for(j=0;min_states[i][j]!=-2;j++){
-			arr[j]=min_states[i][j];
+	while(i<counter && i<states){
+		int arr[states], c=0, pre_counter;
+		
+		for(j=0;j<states;j++){
+			if(min_states[i][j]!=-2){
+				arr[c]=min_states[i][j];
+				c++;
+			}
 		}
-		c=j;
+		
 		pre_counter=counter;
-		counter = check_states(states, alphabets, transitions, arr, c, min_states, counter);
+		counter = check_states(states, alphabets, transitions, arr, c, min_states, counter,i,min_transitions);
+		
 		if(pre_counter==counter){
 			i++;
 		}
-		//printf("%d ",c);
+		else{
+			i=0;
+		}
 	}
+	
+	for(i=0;i<counter;i++){
+		for(j=0;j<states;j++){
+			if(istate==min_states[i][j]){
+				min_istate=i;
+				break;
+			}
+		}
+	}
+	
+	for(i=0;i<states;i++){
+		min_fstate[i]=-2;
+	}
+	x=0;
+	for(i=0;i<counter;i++){
+		for(j=0;min_states[i][j]!=-2;j++){
+			for(k=0;fstate[k]!=-2;k++){
+				if(min_states[i][j]==fstate[k]){
+					min_fstate[x]=i;
+					x++;
+					break;
+				}
+			}
+			break;	
+		}
+	}
+	
+	print(alphabets,states,counter,min_states,min_transitions,min_istate, min_fstate);
 }
 
 int main(){
@@ -100,7 +188,6 @@ int main(){
 	while((c = fgetc(ptr))!='\n'){
 		states = states*10 + ((int)(c)-48);
 	}
-	printf("States = %d\n",states);
 	
 	int fstate[states];
 		
@@ -112,7 +199,6 @@ int main(){
 	while((c = fgetc(ptr))!='\n'){
 		alphabets = alphabets*10 + ((int)(c)-48);
 	}
-	printf("Aplhabets = %d\n",alphabets);
 	
 	//Transitions.	
 	int transitions[states][alphabets];
@@ -126,12 +212,6 @@ int main(){
 			c=fgetc(ptr);
 		}
 	}
-	for(i=0;i<states;i++){
-		for(j=0;j<alphabets;j++){
-			printf("%d ",transitions[i][j]);
-		}
-		printf("\n");
-	}
 	
 	//Initial state.
 	fscanf(ptr, "%[^\n]", buff);
@@ -141,7 +221,6 @@ int main(){
 	while((c = fgetc(ptr))!='\n'){
 		istate = istate*10 + ((int)(c)-48);
 	}
-	printf("Initial state = %d\n",istate);
 	
 	//Final states.
 	for(i=0;i<states;i++){
@@ -157,9 +236,6 @@ int main(){
 			x++;
 		}
 		c=fgetc(ptr);
-	}
-	for(i=0;i<states;i++){
-		printf("%d ",fstate[i]);
 	}
 	
 	minimize(states, alphabets, transitions, istate, fstate);
