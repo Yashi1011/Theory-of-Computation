@@ -1,21 +1,31 @@
+//Program to minimize DFA.
+
+
 #include<stdio.h>
 
+//Function to order the minimized states.
 void order(int states,int min_states[states][states],int imp){
 	int i,c=0,a[states];
+	
 	for(i=0;i<states;i++)
 		a[i]=-2;
+		
 	for(i=0;i<states;i++){
 		if(min_states[imp][i]!=-2){
 			a[c]=min_states[imp][i];
 			c++;
 		}
 	}
+	
 	for(i=0;i<states;i++)
 		min_states[imp][i]=a[i];
 }
 
-print(int alphabets,int states,int counter,int min_states[states][states],int min_transitions[states][alphabets], int min_istate, int min_fstate[states]){
+//Function to print minimized DFA.
+void print(int alphabets,int states,int counter,int min_states[states][states],int min_transitions[states][alphabets], int min_istate, int min_fstate[states]){
 	int i,j;
+	
+	//Printing only states od minimized DFA.
 	printf("\nMINIMIZED DFA STATES : \n\n");
 	for(i=0;i<counter;i++){
 		printf("State %d = ( ",i);
@@ -24,12 +34,15 @@ print(int alphabets,int states,int counter,int min_states[states][states],int mi
 		}
 		printf(")\n");
 	}
+	
+	//Printing transitions of minimized DFA.
 	printf("\nTRANSITIONS : \n\n");
 	printf("State\t");
 	for(i=0;i<alphabets;i++){
 		printf("alp%d\t",i+1);
 	}
 	printf("\n");
+
 	for(i=0;i<counter;i++){
 		printf("%d\t",i);
 		for(j=0;j<alphabets;j++){
@@ -37,13 +50,18 @@ print(int alphabets,int states,int counter,int min_states[states][states],int mi
 		}
 		printf("\n");
 	}
+	
+	//Printing initial state.
 	printf("\nINITIAL STATE : state %d\n",min_istate);
+	
+	//Printing final state.
 	printf("\nFINAL STATE(S) : \n");
 	for(i=0;min_fstate[i]!=-2;i++){
 		printf("state %d\n",min_fstate[i]);
 	}
 }
 
+//Function to split the groups of states.
 int check_states(int states,int alphabets, int transitions[states][alphabets], int arr[states],int c,int min_states[states][states],int counter,int imp, int min_transitions[states][alphabets]){
 	int a,i,j,k,l;
 	int sub[alphabets][c];
@@ -80,8 +98,9 @@ int check_states(int states,int alphabets, int transitions[states][alphabets], i
 				}
 			}
 		}
-			
 	}
+	
+	//If flag==1 then new state is created.
 	if(flag==1){
 		counter++;
 	}
@@ -90,6 +109,7 @@ int check_states(int states,int alphabets, int transitions[states][alphabets], i
 	return counter;
 }
 
+//Funtion to start the minimization of given DFA.
 void minimize(int states, int alphabets, int transitions[states][alphabets], int istate, int fstate[states]){
 	int min_states[states][states];
 	int i,j,x,k;
@@ -117,6 +137,7 @@ void minimize(int states, int alphabets, int transitions[states][alphabets], int
 			c0++;
 		}
 	}
+	
 	int counter=2;
 	i=0;
 	while(i<counter && i<states){
@@ -140,6 +161,7 @@ void minimize(int states, int alphabets, int transitions[states][alphabets], int
 		}
 	}
 	
+	//Finding the initial state of minimized DFA
 	for(i=0;i<counter;i++){
 		for(j=0;j<states;j++){
 			if(istate==min_states[i][j]){
@@ -149,9 +171,11 @@ void minimize(int states, int alphabets, int transitions[states][alphabets], int
 		}
 	}
 	
+	//Finding the final state(s) of minimized DFA.
 	for(i=0;i<states;i++){
 		min_fstate[i]=-2;
 	}
+	
 	x=0;
 	for(i=0;i<counter;i++){
 		for(j=0;min_states[i][j]!=-2;j++){
@@ -166,6 +190,7 @@ void minimize(int states, int alphabets, int transitions[states][alphabets], int
 		}
 	}
 	
+	//Calling the print function.
 	print(alphabets,states,counter,min_states,min_transitions,min_istate, min_fstate);
 }
 
@@ -238,6 +263,7 @@ int main(){
 		c=fgetc(ptr);
 	}
 	
+	//Calling the minimize function.
 	minimize(states, alphabets, transitions, istate, fstate);
 	
 	return 0;
