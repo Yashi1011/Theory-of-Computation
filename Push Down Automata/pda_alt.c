@@ -1,6 +1,12 @@
+//Constructing a Push Down Automata for a^n b^m a^m b^n.
+
+
+//Importing the libraries.
 #include <stdio.h>
 #include <stdlib.h>
 
+
+//Defining a structure for stack.
 struct Stack
 {
 	char stack[100];
@@ -8,21 +14,29 @@ struct Stack
 	int cnt;
 }s;
 
+
+//Push into the stack.
 void push(char c)
 {
 	s.stack[++s.top]=c;
 	s.cnt++;
 }
 
+
+//Pop from the stack.
 char pop()
 {
 	s.cnt--;
 	return s.stack[s.top--];
 }
 
+
+//Declaring global values.
 int i=0;
 char word[50];
 
+
+//Checking b^n.
 void check_a()
 {
 	while(word[i]=='b')
@@ -35,10 +49,15 @@ void check_a()
 		}
 		i++;
 	}
-	printf("Word is accepted\n");
+	if(s.cnt==0)
+		printf("Word is accepted\n");
+	else
+		printf("Wrong word\n");
 	exit(0);
 }
 
+
+//Check a^m.
 void check_b()
 {
 	while(word[i]=='a')
@@ -54,6 +73,8 @@ void check_b()
 	check_a();
 }
 
+
+//Inserting b^m.
 void insert_b()
 {
 	while(word[i]=='b')
@@ -64,6 +85,8 @@ void insert_b()
 	check_b();
 }
 
+
+//Inserting a^n.
 void insert_a()
 {
 	while(word[i]=='a')
@@ -74,6 +97,8 @@ void insert_a()
 	insert_b();
 }
 
+
+//Main funtion.
 int main()
 {
 	s.top=-1;
@@ -86,6 +111,6 @@ int main()
 	}
 	else
 	{
-		printf("n is a positive integer and can't be zero\n");
+		printf("Wrong format\n");
 	}
 }
