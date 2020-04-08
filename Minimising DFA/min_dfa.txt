@@ -12,3 +12,4 @@ Initial State:
 0
 Final State:
 4
+.
