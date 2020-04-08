@@ -1,5 +1,11 @@
 //Checking if a number is divisible by 3 or not.
 
+
+//Importing the libraries.
+#include <stdio.h>
+
+
+//Main function.
 int main()
 {
 
