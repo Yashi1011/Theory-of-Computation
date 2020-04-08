@@ -16,11 +16,14 @@ char epsilon;
 struct Production
 {
 
-    char lhs[10], rhs[10][10];
+    char lhs[10], rhs[20][10];
     int n;
 
 }pro[10];
 
+void remove_moreps(int i,int j,int c){
+	
+}
 
 //Removal of epsilon productions.
 void removeEpsilon(char epsilon){
@@ -30,28 +33,75 @@ void removeEpsilon(char epsilon){
     	
         for(j=0; j<pro[i].n; j++){
         	
-            int m=0;
+            int m=0,c=0;
             char word[10]="";
             for(k=0; k<strlen(pro[i].rhs[j]); k++){
                 if(pro[i].rhs[j][k]==epsilon){
-                	for(l=0;l<strlen(pro[i].rhs[j]);l++){
-                		if(pro[i].rhs[j][l]!=epsilon){
+                	c++;
+                	if(c==1){
+                		for(l=0;l<strlen(pro[i].rhs[j]);l++){
+                			if(pro[i].rhs[j][l]!=epsilon){
+                				word[m]=pro[i].rhs[j][l];
+                    			m++;
+							}
+                		
+						}
+						
+					}
+                	
+                }
+            
+            }
+            
+            printf("%s\n",word);
+            if(strlen(word)!=0){
+            	int flag=0;
+            	for(k=0;k<pro[i].n;k++){
+            		if(strcmp(pro[i].rhs[k],word)==0){
+            			flag=1;
+					}
+				}
+				if(flag==0){
+					strcpy(pro[i].rhs[pro[i].n],word);
+            		printf("--%s\n",pro[i].rhs[pro[i].n]);
+            		pro[i].n++;
+				}
+           	}
+			
+            if(c>=2){
+            	printf("c=%d\n",c);
+            	int x,ind,y=0;
+            	//remove_moreps(i,j,c);
+            	for(x=1;x<=c;x++){
+            		m=0;
+            		y=0;
+            		for(k=0;k<strlen(pro[i].rhs[j]);k++){
+            			if(pro[i].rhs[j][k]==epsilon){
+            				y++;
+						}
+						if(y==x){
+							ind=k;
+							printf("k=%d\n",k);
+							break;
+						}
+            		}
+            		for(l=0;l<strlen(pro[i].rhs[j]);l++){
+            			
+                		if(l!=ind){
                 			word[m]=pro[i].rhs[j][l];
                     		m++;
 						}
-                		
-					}
-                    
-                }
-                
-            }
-            printf("%s\n",word);
-            if(strlen(word)!=0){
-            	strcpy(pro[i].rhs[pro[i].n],word);
-            	printf("--%s\n",pro[i].rhs[pro[i].n]);
-            	pro[i].n++;
+                	}
+                	strcpy(pro[i].rhs[pro[i].n],word);
+            		printf("--%s\n",pro[i].rhs[pro[i].n]);
+            		pro[i].n++;
+                	
+				}
+            	
 			}
+            
         }
+        
     }
 
 }
