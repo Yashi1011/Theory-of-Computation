@@ -92,9 +92,17 @@ void removeEpsilon(char epsilon){
                     		m++;
 						}
                 	}
-                	strcpy(pro[i].rhs[pro[i].n],word);
-            		printf("--%s\n",pro[i].rhs[pro[i].n]);
-            		pro[i].n++;
+                	int flag=0;
+            		for(k=0;k<pro[i].n;k++){
+            			if(strcmp(pro[i].rhs[k],word)==0){
+            				flag=1;
+						}
+					}
+					if(flag==0){
+						strcpy(pro[i].rhs[pro[i].n],word);
+            			printf("--%s\n",pro[i].rhs[pro[i].n]);
+            			pro[i].n++;
+					}
                 	
 				}
             	
